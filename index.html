@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QA Simulator - Version Stable</title>
+    <title>QA Simulator - Fix Final</title>
     <style>
         :root {
             --neon-blue: #00d2ff;
@@ -14,190 +14,146 @@
             --card-bg: #161b22;
         }
 
-        * { box-sizing: border-box; }
-
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: var(--dark-bg);
             color: #e6edf3;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
+            margin: 0; padding: 20px;
+            display: flex; justify-content: center;
         }
 
-        .container { 
-            max-width: 900px; 
-            margin: 0 auto; 
-            display: flex;
-            flex-direction: column;
-            gap: 30px; /* Espace forcé entre les sections */
-        }
+        .container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 30px; }
 
-        h1 { text-align: center; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); margin: 0; }
-        h2 { color: var(--neon-purple); border-left: 4px solid var(--neon-purple); padding-left: 15px; margin: 0; font-size: 1.2rem; }
+        h1 { text-align: center; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+        h2 { color: var(--neon-purple); border-left: 4px solid var(--neon-purple); padding-left: 15px; margin-bottom: 15px; }
 
-        /* --- SECTION 1: BOUTONS --- */
-        .section-box {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        .section-box { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #30363d; }
 
-        .test-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-        }
+        .test-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 15px; }
 
         .test-btn {
-            background: var(--card-bg);
-            border: 1px solid #30363d;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
+            background: #21262d; border: 1px solid #30363d; color: white;
+            padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s;
         }
+        .test-btn:hover { border-color: var(--neon-blue); }
 
-        .test-btn:hover { border-color: var(--neon-blue); background: #1c2128; }
+        #display-zone { background: #0d1117; padding: 15px; border-radius: 8px; min-height: 80px; border: 1px dashed #30363d; }
 
-        #display-zone {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 5px solid var(--neon-blue);
-            padding: 20px;
-            border-radius: 8px;
-            min-height: 120px; /* Empêche le saut de mise en page */
-        }
-
-        /* --- SECTION 2: QUIZ --- */
-        .quiz-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid #30363d;
-            width: 100%;
-        }
+        /* QUIZ */
+        .quiz-card { position: relative; min-height: 300px; }
+        .quiz-header { display: flex; justify-content: space-between; color: var(--neon-blue); margin-bottom: 10px; font-weight: bold; }
+        .progress-bar { height: 6px; background: #21262d; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+        #progress-fill { height: 100%; width: 0%; background: var(--neon-blue); transition: 0.4s; }
 
         .option {
-            background: #21262d;
-            border: 1px solid #30363d;
-            color: white;
-            padding: 14px;
-            margin: 10px 0;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-            display: block;
+            background: #21262d; border: 1px solid #30363d; color: white;
+            padding: 15px; margin: 8px 0; border-radius: 8px; cursor: pointer; width: 100%; text-align: left;
         }
-
         .option:hover:not(:disabled) { border-color: var(--neon-blue); }
         .correct { background: var(--neon-green) !important; color: black; font-weight: bold; }
         .wrong { background: var(--neon-red) !important; color: white; }
 
-        .progress-bar { height: 8px; background: #21262d; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
-        #progress-fill { height: 100%; width: 0%; background: var(--neon-blue); transition: 0.4s; }
-        
-        .quiz-header { display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--neon-blue); font-weight: bold; }
-
-        .info-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-right: 5px; background: var(--neon-purple); color: white; text-transform: uppercase;}
+        .hidden { display: none; }
+        .info-tag { font-size: 0.7rem; padding: 2px 6px; background: var(--neon-purple); border-radius: 3px; margin-right: 5px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🚀 QA Simulator</h1>
+    <h1>🚀 QA Simulator Fix</h1>
 
     <div class="section-box">
-        <h2>1. Fiches de Révision</h2>
+        <h2>1. Fiches Mémo</h2>
         <div class="test-selector">
             <button class="test-btn" onclick="showInfo('composant')">Composant</button>
             <button class="test-btn" onclick="showInfo('système')">Système</button>
             <button class="test-btn" onclick="showInfo('acceptation')">Acceptation</button>
-            <button class="test-btn" onclick="showInfo('sit')">SIT (Intégra. Sys)</button>
-            <button class="test-btn" onclick="showInfo('fonctionnel')">Fonctionnel</button>
-            <button class="test-btn" onclick="showInfo('non_f')">Non-Fonct.</button>
+            <button class="test-btn" onclick="showInfo('sit')">SIT</button>
+            <button class="test-btn" onclick="showInfo('fonc')">Fonctionnel</button>
         </div>
-        <div id="display-zone">
-            <p style="color: #8b949e;">Clique sur un bouton pour voir l'explication sans que ça ne chevauche le quiz.</p>
-        </div>
+        <div id="display-zone">Clique sur un bouton pour réviser.</div>
     </div>
 
-    <div class="section-box">
-        <h2>2. Entraînement Aléatoire</h2>
-        <div class="quiz-card">
+    <div class="section-box quiz-card">
+        <div id="quiz-ui">
             <div class="quiz-header">
-                <span id="question-number">Question 1/10</span>
-                <span id="current-score">Score: 0</span>
+                <span id="q-num">Question 1/10</span>
+                <span id="q-score">Score: 0</span>
             </div>
             <div class="progress-bar"><div id="progress-fill"></div></div>
-            <div id="quiz-content">
-                <h3 id="question" style="margin-bottom: 20px;">Chargement...</h3>
-                <div id="options"></div>
-            </div>
+            <h3 id="question-text">Chargement...</h3>
+            <div id="options-container"></div>
+        </div>
+
+        <div id="result-screen" class="hidden" style="text-align: center; padding: 40px 0;">
+            <h2 id="final-status" style="border:none;">🏆 Terminé !</h2>
+            <p id="final-score" style="font-size: 1.5rem; color: var(--neon-blue);"></p>
+            <p>Nouveau quiz dans quelques secondes...</p>
+            <button class="test-btn" style="width: 200px; margin-top: 20px; border-color: var(--neon-green);" onclick="initQuiz()">Recommencer Maintenant</button>
         </div>
     </div>
 </div>
 
 <script>
     const infoData = {
-        composant: { t: "Test de Composant", b: "Boîte Blanche", a: "Développeur", d: "Vérifie l'unité la plus petite de code de manière isolée." },
-        système: { t: "Test Système", b: "Boîte Noire", a: "Testeur QA", d: "Vérifie l'ensemble de l'application selon les besoins." },
-        acceptation: { t: "Test d'Acceptation", b: "Boîte Noire", a: "Client", d: "Dernière étape : le client valide la mise en production." },
-        sit: { t: "Intégration de Système (SIT)", b: "Boîte Noire", a: "QA/DevOps", d: "Vérifie les échanges avec des systèmes tiers (APIs, ERP)." },
-        fonctionnel: { t: "Test Fonctionnel", b: "Boîte Noire", a: "Testeur", d: "Vérifie 'Quoi' : Les fonctions (ex: un calcul correct)." },
-        non_f: { t: "Test Non-Fonctionnel", b: "Boîte Noire", a: "Expert", d: "Vérifie 'Comment' : Performance, Sécurité, UX." }
+        composant: { t: "Test de Composant", b: "Boîte Blanche", a: "Développeur", d: "Vérifie les unités de code isolées (fonctions/classes)." },
+        système: { t: "Test Système", b: "Boîte Noire", a: "Testeur QA", d: "Vérifie l'ensemble de l'appli selon les spécifications." },
+        acceptation: { t: "Test d'Acceptation", b: "Boîte Noire", a: "Client", d: "Validation finale avant mise en production." },
+        sit: { t: "Intégration Système (SIT)", b: "Boîte Noire", a: "DevOps/QA", d: "Vérifie les flux avec les systèmes externes (ERP/APIs)." },
+        fonc: { t: "Test Fonctionnel", b: "Boîte Noire", a: "Testeur", d: "Teste 'Quoi' : Les actions (ex: le bouton enregistre bien)." }
     };
 
     function showInfo(id) {
         const item = infoData[id];
         document.getElementById('display-zone').innerHTML = `
-            <h3 style="color: var(--neon-blue); margin:0 0 10px 0;">${item.t}</h3>
+            <h3 style="color: var(--neon-blue); margin:0;">${item.t}</h3>
             <span class="info-tag">${item.b}</span><span class="info-tag" style="background:#444;">${item.a}</span>
-            <p style="margin-top:10px;">${item.d}</p>`;
+            <p style="margin-top:10px; font-size:0.9rem;">${item.d}</p>`;
     }
 
     const masterBank = [
         { q: "Qui fait les tests de Composant ?", o: ["Client", "Développeur", "Testeur"], a: 1 },
-        { q: "Le test système est une boîte...", o: ["Blanche", "Noire"], a: 1 },
-        { q: "Vérifier la charge du serveur est un test...", o: ["Fonctionnel", "Non-Fonctionnel"], a: 1 },
-        { q: "L'UAT est réalisé par le...", o: ["Développeur", "Client"], a: 1 },
-        { q: "Le test SIT vérifie la connexion avec...", o: ["Le code interne", "Les systèmes externes"], a: 1 },
-        { q: "Vérifier qu'un bug a disparu est un test de...", o: ["Régression", "Confirmation"], a: 1 },
-        { q: "Vérifier que rien n'a été cassé ailleurs est un test de...", o: ["Régression", "Confirmation"], a: 0 },
-        { q: "Le test unitaire est aussi appelé...", o: ["Test Système", "Test de Composant"], a: 1 },
-        { q: "L'analyste métier valide quel niveau ?", o: ["Composant", "Acceptation"], a: 1 },
-        { q: "Vérifier la sécurité est un test...", o: ["Fonctionnel", "Non-Fonctionnel"], a: 1 }
+        { q: "Le test système est un test de type...", o: ["Boîte Blanche", "Boîte Noire"], a: 1 },
+        { q: "Vérifier la rapidité est un test...", o: ["Fonctionnel", "Non-Fonctionnel"], a: 1 },
+        { q: "L'UAT est validé par...", o: ["Le Développeur", "Le Client final"], a: 1 },
+        { q: "Le test SIT vérifie la connexion avec...", o: ["Le code interne", "Les systèmes externes (ERP)"], a: 1 },
+        { q: "Vérifier qu'une correction n'a rien cassé ailleurs :", o: ["Confirmation", "Régression"], a: 1 },
+        { q: "Vérifier qu'un bug spécifique a disparu :", o: ["Confirmation", "Régression"], a: 0 },
+        { q: "Le test unitaire étudie le code interne, c'est de la...", o: ["Boîte Noire", "Boîte Blanche"], a: 1 },
+        { q: "Tester si le calcul de TVA est juste est un test...", o: ["Fonctionnel", "Non-Fonctionnel"], a: 0 },
+        { q: "Le test d'Acceptation a lieu...", o: ["Au début", "À la fin, avant la prod"], a: 1 }
     ];
 
     let sessionQuestions = [];
     let currentQ = 0;
     let score = 0;
+    let autoRestartTimer;
 
     function initQuiz() {
+        clearTimeout(autoRestartTimer); // Annule le redémarrage auto si on clique manuellement
+        document.getElementById('quiz-ui').classList.remove('hidden');
+        document.getElementById('result-screen').classList.add('hidden');
+        
         sessionQuestions = [...masterBank].sort(() => 0.5 - Math.random()).slice(0, 10);
-        currentQ = 0; score = 0;
-        loadQuiz();
+        currentQ = 0; 
+        score = 0;
+        loadQuestion();
     }
 
-    function loadQuiz() {
+    function loadQuestion() {
         if (currentQ >= sessionQuestions.length) {
-            document.getElementById('quiz-content').innerHTML = `
-                <h2 style="color:var(--neon-green); text-align:center;">🎯 Terminé ! Score : ${score}/10</h2>
-                <button class="test-btn" style="width:100%; margin-top:20px;" onclick="initQuiz()">Recommencer</button>`;
+            showResults();
             return;
         }
+
         const data = sessionQuestions[currentQ];
-        document.getElementById('question-number').innerText = `Question ${currentQ + 1}/10`;
-        document.getElementById('current-score').innerText = `Score: ${score}`;
-        document.getElementById('question').innerText = data.q;
+        document.getElementById('q-num').innerText = `Question ${currentQ + 1}/10`;
+        document.getElementById('q-score').innerText = `Score: ${score}`;
         document.getElementById('progress-fill').style.width = `${(currentQ / 10) * 100}%`;
+        document.getElementById('question-text').innerText = data.q;
         
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
         
         data.o.forEach((opt, i) => {
             const btn = document.createElement('button');
@@ -208,11 +164,22 @@
                 btns.forEach(b => b.disabled = true);
                 if (i === data.a) { btn.classList.add('correct'); score++; }
                 else { btn.classList.add('wrong'); btns[data.a].classList.add('correct'); }
-                setTimeout(() => { currentQ++; loadQuiz(); }, 1200);
+                setTimeout(() => { currentQ++; loadQuestion(); }, 1200);
             };
-            optionsDiv.appendChild(btn);
+            container.appendChild(btn);
         });
     }
+
+    function showResults() {
+        document.getElementById('quiz-ui').classList.add('hidden');
+        const screen = document.getElementById('result-screen');
+        screen.classList.remove('hidden');
+        document.getElementById('final-score').innerText = `Score Final : ${score} / 10`;
+        
+        // Relance auto dans 8 secondes
+        autoRestartTimer = setTimeout(initQuiz, 8000);
+    }
+
     initQuiz();
 </script>
 </body>
