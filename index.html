@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QA Ninja Dashboard</title>
+    <title>QA Master - Révision ISTQB</title>
     <style>
         :root {
             --neon-blue: #00d2ff;
@@ -15,7 +15,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--dark-bg);
             color: #e6edf3;
             margin: 0; padding: 20px;
@@ -24,12 +24,13 @@
 
         .container { max-width: 900px; width: 100%; }
 
-        h1 { text-align: center; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); margin-bottom: 40px; }
+        h1 { text-align: center; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); margin-bottom: 20px; }
+        .subtitle { text-align: center; color: #8b949e; margin-bottom: 40px; font-style: italic; }
 
-        /* --- SECTION INTERACTIVE --- */
+        /* --- BOUTONS DE NAVIGATION --- */
         .test-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px; margin-bottom: 30px;
         }
 
@@ -42,21 +43,23 @@
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
+            font-size: 0.9rem;
         }
 
         .test-btn:hover {
             box-shadow: 0 0 15px var(--neon-purple);
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            background: #1c2128;
         }
 
         #display-zone {
             background: rgba(255, 255, 255, 0.05);
             border-left: 4px solid var(--neon-blue);
-            padding: 20px;
+            padding: 25px;
             border-radius: 0 15px 15px 0;
-            min-height: 120px;
+            min-height: 150px;
             margin-bottom: 50px;
-            animation: fadeIn 0.5s;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
         /* --- QUIZ DESIGN --- */
@@ -79,15 +82,16 @@
             width: 100%;
             text-align: left;
             font-size: 1rem;
+            transition: 0.2s;
         }
 
-        .option:hover { background: #30363d; border-color: var(--neon-blue); }
-        .correct { background: var(--neon-green) !important; color: black; font-weight: bold; }
-        .wrong { background: var(--neon-red) !important; color: white; }
+        .option:hover { border-color: var(--neon-blue); background: #30363d; }
+        .correct { background: var(--neon-green) !important; color: black; font-weight: bold; border-color: var(--neon-green); }
+        .wrong { background: var(--neon-red) !important; color: white; border-color: var(--neon-red); }
 
         .progress-bar {
-            height: 10px; background: #21262d;
-            border-radius: 5px; margin-bottom: 20px; overflow: hidden;
+            height: 8px; background: #21262d;
+            border-radius: 4px; margin-bottom: 20px; overflow: hidden;
         }
         #progress-fill {
             height: 100%; width: 0%;
@@ -95,64 +99,76 @@
             transition: 0.4s;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h2 { color: var(--neon-purple); text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>⚡ QA Master Dashboard</h1>
+    <h1>⚡ QA Master : Niveaux de Tests</h1>
+    <p class="subtitle">Révision basée sur ton cours d'hier (ISTQB Standard)</p>
 
     <div class="test-selector">
-        <button class="test-btn" onclick="showInfo('unitaire')">Unit (TU)</button>
-        <button class="test-btn" onclick="showInfo('integration')">Intégration</button>
-        <button class="test-btn" onclick="showInfo('sit')">SIT</button>
-        <button class="test-btn" onclick="showInfo('systeme')">Système</button>
-        <button class="test-btn" onclick="showInfo('uat')">UAT</button>
-        <button class="test-btn" onclick="showInfo('regression')">Régression</button>
+        <button class="test-btn" onclick="showInfo('composant')">1. Composant</button>
+        <button class="test-btn" onclick="showInfo('int_composant')">2. Intégration Composant</button>
+        <button class="test-btn" onclick="showInfo('système')">3. Système</button>
+        <button class="test-btn" onclick="showInfo('int_système')">4. Intégration Système</button>
+        <button class="test-btn" onclick="showInfo('acceptation')">5. Acceptation</button>
     </div>
 
     <div id="display-zone">
-        <h3 style="color: var(--neon-blue);">Clique sur un test ci-dessus pour voir l'explication...</h3>
+        <h3 style="color: var(--neon-blue); margin-top:0;">Prêt pour la révision ?</h3>
+        <p>Clique sur un bouton pour afficher l'explication détaillée de chaque niveau de test vus en cours.</p>
     </div>
 
     <div class="quiz-card">
-        <h2 style="text-align: center; color: var(--neon-purple);">🧠 Ultimate QA Quiz</h2>
+        <h2>🧠 Quiz de Validation</h2>
         <div class="progress-bar"><div id="progress-fill"></div></div>
         <div id="quiz-content">
-            <h3 id="question">Prêt à tester tes connaissances ?</h3>
+            <h3 id="question">Chargement...</h3>
             <div id="options"></div>
         </div>
-        <div id="result" style="text-align: center; margin-top: 20px; font-weight: bold;"></div>
+        <div id="score-text" style="text-align:center; margin-top:15px; color: var(--neon-blue);"></div>
     </div>
 </div>
 
 <script>
-    // DONNÉES DES EXPLICATIONS
+    // DONNÉES MISES À JOUR SELON TON COURS
     const infoData = {
-        unitaire: { t: "Test Unitaire (Boîte Blanche)", d: "On teste une petite brique de code seule. Fait par le dév pour s'assurer que sa logique est correcte." },
-        integration: { t: "Test d'Intégration", d: "On vérifie si deux modules du même logiciel s'emboîtent bien et échangent les bonnes données." },
-        sit: { t: "System Integration Test", d: "Test des flux avec l'extérieur (ex: envoyer une commande à l'API de livraison)." },
-        systeme: { t: "Test Système (Boîte Noire)", d: "Vérification technique complète de l'appli de bout-en-bout." },
-        uat: { t: "User Acceptance Test", d: "Le client teste si le logiciel répond à ses besoins métiers. Étape finale avant la prod." },
-        regression: { t: "Régression vs Confirmation", d: "Confirmation = le bug est-il corrigé ? Régression = Est-ce qu'on a cassé le reste en réparant le bug ?" }
+        composant: { 
+            t: "Test de Composant (ou Unitaire)", 
+            d: "Vérifie chaque module ou unité de code de manière isolée. C'est la base de la pyramide. <br><strong>Focus :</strong> Logique interne, algorithmes." 
+        },
+        int_composant: { 
+            t: "Intégration de Composants", 
+            d: "Vérifie les interactions et interfaces entre les modules internes d'un même système après leurs tests individuels. <br><strong>Focus :</strong> Passage de données entre modules." 
+        },
+        système: { 
+            t: "Test Système", 
+            d: "Vérifie l'ensemble du système complet par rapport aux spécifications. On teste l'appli comme un tout. <br><strong>Focus :</strong> Besoins fonctionnels et non-fonctionnels." 
+        },
+        int_système: { 
+            t: "Intégration de Système (SIT)", 
+            d: "Vérifie les interactions entre ton système et des systèmes externes (APIs, ERP, autres logiciels de l'entreprise). <br><strong>Focus :</strong> Flux de données externes." 
+        },
+        acceptation: { 
+            t: "Test d'Acceptation (UAT)", 
+            d: "Validation finale par les utilisateurs ou le client pour confirmer que le système répond aux besoins métiers. <br><strong>Focus :</strong> Confiance du client, Go/No-Go." 
+        }
     };
 
     function showInfo(id) {
         const zone = document.getElementById('display-zone');
-        zone.style.animation = 'none';
-        zone.offsetHeight; // Trigger reflow
-        zone.style.animation = 'fadeIn 0.5s';
-        zone.innerHTML = `<h3 style="color: var(--neon-blue);">${infoData[id].t}</h3><p>${infoData[id].d}</p>`;
+        zone.innerHTML = `<h3 style="color: var(--neon-blue); margin-top:0;">${infoData[id].t}</h3><p>${infoData[id].d}</p>`;
     }
 
-    // DONNÉES DU QUIZ
+    // QUIZ GLOBAL MIS À JOUR
     const quizData = [
-        { q: "Quel test vérifie qu'une correction n'a pas créé de nouveaux bugs ?", o: ["Test de Confirmation", "Test de Régression", "Test Unitaire"], a: 1 },
-        { q: "En test 'Boîte Blanche', on teste quoi ?", o: ["L'interface graphique", "Le code et sa logique", "Le besoin client"], a: 1 },
-        { q: "Quel est l'ordre logique des tests ?", o: ["UAT -> Système -> TU", "TU -> Intégration -> Système -> UAT", "Système -> TU -> SIT"], a: 1 },
-        { q: "Le test SIT se concentre sur quoi ?", o: ["Les boucles IF/ELSE", "Les interfaces avec des systèmes tiers", "La couleur des boutons"], a: 1 },
-        { q: "Qui réalise généralement l'UAT ?", o: ["Le développeur", "L'utilisateur final / Le client", "Le robot de test"], a: 1 }
+        { q: "L'Intégration de Système (SIT) vérifie principalement quoi ?", o: ["Les fonctions isolées", "Les liens avec des systèmes externes (ex: ERP)", "L'interface utilisateur"], a: 1 },
+        { q: "Quel test se fait sur une brique de code isolée (classe ou fonction) ?", o: ["Test Système", "Acceptation", "Test de Composant"], a: 2 },
+        { q: "L'Intégration de Composants vérifie les échanges entre quoi ?", o: ["L'appli et la banque", "Les modules internes du code", "Le client et le dev"], a: 1 },
+        { q: "Quel est le dernier niveau de test avant la mise en production ?", o: ["Test Système", "Test d'Acceptation", "Intégration Composant"], a: 1 },
+        { q: "Le test Système est généralement un test de type :", o: ["Boîte Blanche", "Boîte Noire"], a: 1 }
     ];
 
     let currentQ = 0;
@@ -160,7 +176,7 @@
 
     function loadQuiz() {
         if (currentQ >= quizData.length) {
-            document.getElementById('quiz-content').innerHTML = `<h2>🏁 Terminé ! Score : ${score}/${quizData.length}</h2><button class="test-btn" onclick="location.reload()">Rejouer</button>`;
+            document.getElementById('quiz-content').innerHTML = `<h2 style="color:var(--neon-green)">🏁 Score final : ${score}/${quizData.length}</h2><button class="test-btn" style="width:100%" onclick="location.reload()">Recommencer</button>`;
             return;
         }
 
@@ -168,7 +184,6 @@
         document.getElementById('question').innerText = data.q;
         const optionsDiv = document.getElementById('options');
         optionsDiv.innerHTML = '';
-        
         document.getElementById('progress-fill').style.width = `${(currentQ / quizData.length) * 100}%`;
 
         data.o.forEach((opt, i) => {
