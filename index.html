@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QA Master - Entraînement Aléatoire</title>
+    <title>QA Simulator Pro - Ultra Clean</title>
     <style>
         :root {
             --neon-blue: #00d2ff;
@@ -29,7 +29,6 @@
 
         h2 { color: var(--neon-purple); border-left: 4px solid var(--neon-purple); padding-left: 15px; margin: 30px 0 15px 0; font-size: 1.2rem; }
 
-        /* --- NAVIGATION --- */
         .test-selector {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -63,13 +62,11 @@
         .tag-box { background: #444; color: white; }
         .tag-actor { background: var(--neon-purple); color: white; }
 
-        /* --- QUIZ DYNAMIQUE --- */
         .quiz-card {
             background: var(--card-bg);
             border-radius: 15px;
             padding: 25px;
             border: 1px solid #30363d;
-            position: relative;
         }
 
         .option {
@@ -99,7 +96,7 @@
 
 <div class="container">
     <h1>🚀 QA Simulator Pro</h1>
-    <p class="subtitle">Banque de questions aléatoires - Prêt pour l'examen ?</p>
+    <p class="subtitle">Entraînement Aléatoire - Édition Sans Bug</p>
 
     <h2>1. Récapitulatif Rapide</h2>
     <div class="test-selector">
@@ -113,10 +110,10 @@
     </div>
 
     <div id="display-zone">
-        <h3 style="color: var(--neon-blue); margin-top:0;">Cliquez pour réviser avant le quiz...</h3>
+        <h3 style="color: var(--neon-blue); margin-top:0;">Cliquez pour réviser...</h3>
     </div>
 
-    <h2>2. Entraînement Aléatoire (10 questions)</h2>
+    <h2>2. Quiz Aléatoire</h2>
     <div class="quiz-card">
         <div class="quiz-header">
             <span id="question-number">Question 1/10</span>
@@ -124,14 +121,13 @@
         </div>
         <div class="progress-bar"><div id="progress-fill"></div></div>
         <div id="quiz-content">
-            <h3 id="question" style="margin-top:0; min-height: 60px;">Chargement du challenge...</h3>
+            <h3 id="question" style="margin-top:0; min-height: 60px;">Chargement...</h3>
             <div id="options"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // --- BASE DE DONNÉES DES INFOS ---
     const infoData = {
         composant: { t: "Test de Composant", b: "Boîte Blanche", a: "Développeur", d: "Vérifie l'unité la plus petite (fonction/classe) isolée." },
         int_composant: { t: "Intégration de Composants", b: "Blanche/Grise", a: "Dév/QA", d: "Vérifie les interactions entre modules internes." },
@@ -150,58 +146,43 @@
             <p style="margin-top:15px;">${item.d}</p>`;
     }
 
-    // --- BANQUE DE QUESTIONS (AJOUTE EN AUTANT QUE TU VEUX ICI) ---
     const masterBank = [
-        { q: "Qui est responsable des tests de Composant ?", o: ["Testeur indépendant", "Le Client", "Le Développeur"], a: 2 },
-        { q: "Quel test vérifie la structure interne du code ?", o: ["Boîte Noire", "Boîte Blanche", "UAT"], a: 1 },
-        { q: "Un test de charge est un test...", o: ["Fonctionnel", "Non-Fonctionnel", "De Régression"], a: 1 },
-        { q: "Le test d'Acceptation est un test de type...", o: ["Boîte Blanche", "Boîte Noire"], a: 1 },
-        { q: "Quel niveau de test suit immédiatement le test de Composant ?", o: ["Test Système", "Intégration de Composants", "UAT"], a: 1 },
-        { q: "Le test SIT vérifie la communication avec...", o: ["Les fonctions internes", "Des systèmes externes (ex: ERP)", "Le clavier"], a: 1 },
-        { q: "Vérifier qu'une correction n'a rien cassé s'appelle :", o: ["Test de Confirmation", "Test de Régression", "Smoke Test"], a: 1 },
-        { q: "Vérifier qu'un bug a bien disparu s'appelle :", o: ["Test de Confirmation", "Test de Régression", "Stress Test"], a: 0 },
-        { q: "L'UAT sert à valider quoi ?", o: ["La vitesse du serveur", "Les besoins métiers du client", "La propreté du code"], a: 1 },
-        { q: "Le testeur utilise l'UI sans voir le code. C'est du...", o: ["White Box", "Black Box", "Unit Testing"], a: 1 },
-        { q: "Quel test vérifie si le bouton 'Envoyer' poste bien le formulaire ?", o: ["Fonctionnel", "Non-Fonctionnel", "Performance"], a: 0 },
-        { q: "Un test vérifiant la résistance aux hackers est un test :", o: ["Fonctionnel", "De Sécurité (Non-Fonctionnel)", "De Composant"], a: 1 },
-        { q: "Le développeur teste ses propres lignes de code. Niveau ?", o: ["Système", "Composant", "Acceptation"], a: 1 },
-        { q: "L'intégration de système (SIT) se fait avant l'Acceptation ?", o: ["Vrai", "Faux"], a: 0 },
-        { q: "L'analyste métier participe surtout à quel niveau ?", o: ["Composant", "Intégration", "Acceptation"], a: 2 }
+        { q: "Qui réalise les tests de Composant ?", o: ["Le Client", "Le Développeur", "Le DevOps"], a: 1 },
+        { q: "Quel test vérifie la structure interne du code ?", o: ["Boîte Noire", "Boîte Blanche"], a: 1 },
+        { q: "Un test de performance est un test...", o: ["Fonctionnel", "Non-Fonctionnel"], a: 1 },
+        { q: "L'UAT est un test de type...", o: ["Boîte Blanche", "Boîte Noire"], a: 1 },
+        { q: "Vérifier qu'une correction n'a rien cassé est un test de :", o: ["Confirmation", "Régression"], a: 1 },
+        { q: "Le test SIT vérifie la communication avec...", o: ["Les fonctions internes", "Des systèmes externes (APIs/ERP)"], a: 1 },
+        { q: "L'UAT sert à valider quoi ?", o: ["La vitesse", "Les besoins métiers du client"], a: 1 },
+        { q: "Le développeur teste ses propres lignes de code. Niveau ?", o: ["Système", "Composant"], a: 1 },
+        { q: "Vérifier le bouton 'Payer' est un test :", o: ["Fonctionnel", "Non-Fonctionnel"], a: 0 },
+        { q: "L'analyste métier participe surtout à quel niveau ?", o: ["Composant", "Acceptation"], a: 1 }
     ];
 
     let sessionQuestions = [];
     let currentQ = 0;
     let score = 0;
 
-    // Fonction pour mélanger et choisir les questions
     function initQuiz() {
-        // Mélange la banque complète
-        let shuffled = [...masterBank].sort(() => 0.5 - Math.random());
-        // Prend les 10 premières
-        sessionQuestions = shuffled.slice(0, 10);
-        currentQ = 0;
-        score = 0;
+        sessionQuestions = [...masterBank].sort(() => 0.5 - Math.random()).slice(0, 10);
+        currentQ = 0; score = 0;
         loadQuiz();
     }
 
     function loadQuiz() {
         if (currentQ >= sessionQuestions.length) {
             document.getElementById('quiz-content').innerHTML = `
-                <h2 style="color:var(--neon-green)">🎯 Session terminée !</h2>
-                <p style="text-align:center">Score final : ${score} / ${sessionQuestions.length}</p>
-                <button class="test-btn" style="width:100%" onclick="initQuiz()">Lancer une nouvelle session aléatoire</button>`;
+                <h2 style="color:var(--neon-green)">🎯 Score : ${score} / ${sessionQuestions.length}</h2>
+                <button class="test-btn" style="width:100%" onclick="initQuiz()">Nouvelle Session</button>`;
             return;
         }
-
         const data = sessionQuestions[currentQ];
-        document.getElementById('question-number').innerText = `Question ${currentQ + 1} / ${sessionQuestions.length}`;
+        document.getElementById('question-number').innerText = `Question ${currentQ + 1} / 10`;
         document.getElementById('current-score').innerText = `Score: ${score}`;
         document.getElementById('question').innerText = data.q;
-        document.getElementById('progress-fill').style.width = `${(currentQ / sessionQuestions.length) * 100}%`;
-
+        document.getElementById('progress-fill').style.width = `${(currentQ / 10) * 100}%`;
         const optionsDiv = document.getElementById('options');
         optionsDiv.innerHTML = '';
-
         data.o.forEach((opt, i) => {
             const btn = document.createElement('button');
             btn.className = 'option';
@@ -216,183 +197,7 @@
             optionsDiv.appendChild(btn);
         });
     }
-
-    // Lancer au démarrage
     initQuiz();
 </script>
-
-</body>
-</html>            margin-bottom: 40px;
-        }
-
-        .info-tag {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-right: 10px;
-            text-transform: uppercase;
-        }
-        .tag-box { background: #444; color: white; }
-        .tag-actor { background: var(--neon-purple); color: white; }
-
-        /* --- QUIZ --- */
-        .quiz-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid #30363d;
-        }
-
-        .option {
-            background: #21262d;
-            border: 1px solid #30363d;
-            color: white;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-            transition: 0.2s;
-        }
-
-        .option:hover { border-color: var(--neon-blue); }
-        .correct { background: var(--neon-green) !important; color: black; font-weight: bold; }
-        .wrong { background: var(--neon-red) !important; color: white; }
-
-        .progress-bar { height: 6px; background: #21262d; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
-        #progress-fill { height: 100%; width: 0%; background: var(--neon-blue); transition: 0.4s; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>🚀 QA Ultra-Dashboard</h1>
-    <p class="subtitle">Révision complète : Niveaux, Types & Méthodologies</p>
-
-    <h2>1. Niveaux de Tests (ISTQB)</h2>
-    <div class="test-selector">
-        <button class="test-btn" onclick="showInfo('composant')">Composant</button>
-        <button class="test-btn" onclick="showInfo('int_composant')">Intégration Composant</button>
-        <button class="test-btn" onclick="showInfo('système')">Système</button>
-        <button class="test-btn" onclick="showInfo('int_système')">Intégration Système</button>
-        <button class="test-btn" onclick="showInfo('acceptation')">Acceptation</button>
-    </div>
-
-    <h2>2. Types & Maintenance</h2>
-    <div class="test-selector">
-        <button class="test-btn" style="border-color: var(--neon-green)" onclick="showInfo('fonctionnel')">Fonctionnel (Quoi)</button>
-        <button class="test-btn" style="border-color: var(--neon-red)" onclick="showInfo('non_fonctionnel')">Non-Fonctionnel (Comment)</button>
-        <button class="test-btn" onclick="showInfo('regression')">Régression / Confirmation</button>
-    </div>
-
-    <div id="display-zone">
-        <h3 style="color: var(--neon-blue); margin-top:0;">Mode Révision Activé</h3>
-        <p>Sélectionne un bouton pour explorer les détails techniques, l'acteur et la méthodologie (Boîte Noire/Blanche).</p>
-    </div>
-
-    <h2>3. Challenge Quiz</h2>
-    <div class="quiz-card">
-        <div class="progress-bar"><div id="progress-fill"></div></div>
-        <div id="quiz-content">
-            <h3 id="question" style="margin-top:0;">Prêt ?</h3>
-            <div id="options"></div>
-        </div>
-        <div id="score-text" style="text-align:center; margin-top:15px; font-size: 0.9rem;"></div>
-    </div>
-</div>
-
-<script>
-    const infoData = {
-        composant: { 
-            t: "Test de Composant", b: "Boîte Blanche", a: "Développeur",
-            d: "Vérifie les plus petites unités de code (fonctions, classes). On regarde l'intérieur du code." 
-        },
-        int_composant: { 
-            t: "Intégration de Composants", b: "Boîte Blanche / Grise", a: "Développeur / Testeur",
-            d: "Vérifie les échanges entre modules internes du même logiciel." 
-        },
-        système: { 
-            t: "Test Système", b: "Boîte Noire", a: "Testeur QA",
-            d: "Vérifie le logiciel complet par rapport aux spécifications fonctionnelles." 
-        },
-        int_système: { 
-            t: "Intégration de Système (SIT)", b: "Boîte Noire", a: "Testeur QA / DevOps",
-            d: "Vérifie la communication entre ton logiciel et les systèmes externes (APIs, ERP)." 
-        },
-        acceptation: { 
-            t: "Test d'Acceptation", b: "Boîte Noire", a: "Client / Utilisateur",
-            d: "Validation finale du métier pour décider de la mise en production." 
-        },
-        fonctionnel: { 
-            t: "Test Fonctionnel", b: "Boîte Noire", a: "Testeur QA / Analyste",
-            d: "Vérifie <strong>ce que fait</strong> le logiciel. Ex: 'Le bouton enregistrer fonctionne-t-il ?'" 
-        },
-        non_fonctionnel: { 
-            t: "Test Non-Fonctionnel", b: "Boîte Noire", a: "Expert Performance / Sécurité",
-            d: "Vérifie <strong>comment</strong> le logiciel se comporte. Ex: Charge, Sécurité, UX, Rapidité." 
-        },
-        regression: { 
-            t: "Régression vs Confirmation", b: "Mixte", a: "Testeur QA",
-            d: "Confirmation : Le bug est-il réparé ? <br>Régression : Est-ce qu'on a cassé le reste en réparant ?" 
-        }
-    };
-
-    function showInfo(id) {
-        const item = infoData[id];
-        const zone = document.getElementById('display-zone');
-        zone.innerHTML = `
-            <h3 style="color: var(--neon-blue); margin-top:0;">${item.t}</h3>
-            <div>
-                <span class="info-tag tag-box">⬛ ${item.b}</span>
-                <span class="info-tag tag-actor">👤 ${item.a}</span>
-            </div>
-            <p style="margin-top:15px;">${item.d}</p>
-        `;
-    }
-
-    const quizData = [
-        { q: "Qui réalise principalement les tests d'Acceptation ?", o: ["Le Développeur", "Le Client / Utilisateur", "Le DevOps"], a: 1 },
-        { q: "Le test de Composant est généralement de quel type ?", o: ["Boîte Noire", "Boîte Blanche"], a: 1 },
-        { q: "Un test de performance (temps de charge) est un test :", o: ["Fonctionnel", "Non-Fonctionnel"], a: 1 },
-        { q: "Vérifier la communication avec un ERP externe est un test de :", o: ["Composant", "Intégration Système (SIT)", "Système"], a: 1 },
-        { q: "Je vérifie que le code interne respecte la logique. Je suis :", o: ["Le Développeur (Boîte Blanche)", "Le Client (Boîte Noire)"], a: 0 },
-        { q: "Vérifier si le bouton 'Payer' effectue l'action attendue est un test :", o: ["Fonctionnel", "Non-Fonctionnel"], a: 0 }
-    ];
-
-    let currentQ = 0;
-    let score = 0;
-
-    function loadQuiz() {
-        if (currentQ >= quizData.length) {
-            document.getElementById('quiz-content').innerHTML = `<h2>🏁 Score : ${score}/${quizData.length}</h2><button class="test-btn" style="width:100%" onclick="location.reload()">Recommencer</button>`;
-            return;
-        }
-        const data = quizData[currentQ];
-        document.getElementById('question').innerText = data.q;
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
-        document.getElementById('progress-fill').style.width = `${(currentQ / quizData.length) * 100}%`;
-
-        data.o.forEach((opt, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'option';
-            btn.innerText = opt;
-            btn.onclick = () => {
-                const btns = document.querySelectorAll('.option');
-                btns.forEach(b => b.disabled = true);
-                if (i === data.a) { btn.classList.add('correct'); score++; }
-                else { btn.classList.add('wrong'); btns[data.a].classList.add('correct'); }
-                setTimeout(() => { currentQ++; loadQuiz(); }, 1500);
-            };
-            optionsDiv.appendChild(btn);
-        });
-    }
-
-    loadQuiz();
-</script>
-
 </body>
 </html>
